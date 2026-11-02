@@ -1,0 +1,1 @@
+Engineering portfolio, version 2. Upload index.html, styles.css, and script.js to the root of your GitHub Pages repository. Do not upload the original resume: it includes sensitive personal information. Add a sanitized CV and verified LinkedIn URL later.
