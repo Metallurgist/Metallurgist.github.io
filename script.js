@@ -2,14 +2,20 @@
 'use strict';
 
 /* ============================================================
-   PROFESSIONAL PORTFOLIO — MOHAMMED BURHANUDDEEN R.
+   MOHAMMED BURHANUDDEEN R. — PORTFOLIO
 
-   CAREER JOURNEY:
-   01 Chennai -> 02 Villarzana (high upward curve)
-   02 Villarzana -> 01 Chennai (straight return)
-   01 Chennai -> 03 Jeddah (deep downward curve)
+   Includes:
+   1. Mobile navigation
+   2. Copyright year
+   3. Original PDF resume download
+   4. Company logos on career cards
+   5. Interactive Leaflet map
+   6. Curved and straight career routes
+   7. Directional arrows
+   8. Career journey summary
 
-   Map routes are illustrative career paths, not flight tracks.
+   Map sequence:
+   Chennai -> Villamarzana -> Chennai -> Jeddah
 ============================================================ */
 
 
@@ -52,8 +58,10 @@ if (yearElement) {
 /* ============================================================
    3. ORIGINAL RESUME DOWNLOAD
 
-   Keeps your original PDF untouched.
-   Finds the single PDF in assets/cv/.
+   Your original PDF remains unchanged.
+
+   Keep exactly one PDF inside assets/cv/.
+   The downloader automatically discovers its filename.
 ============================================================ */
 
 document.querySelectorAll('.resume-download').forEach(link => {
@@ -70,7 +78,7 @@ document.querySelectorAll('.resume-download').forEach(link => {
       );
 
       if (!response.ok) {
-        throw new Error('Could not access the resume folder');
+        throw new Error('Could not access resume folder');
       }
 
       const entries = await response.json();
@@ -98,13 +106,14 @@ document.querySelectorAll('.resume-download').forEach(link => {
         window.location.href
       );
 
-      const a = document.createElement('a');
-      a.href = downloadUrl.href;
-      a.download = filename;
+      const anchor = document.createElement('a');
 
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      anchor.href = downloadUrl.href;
+      anchor.download = filename;
+
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
 
     } catch (error) {
       alert('Resume download unavailable: ' + error.message);
@@ -116,9 +125,41 @@ document.querySelectorAll('.resume-download').forEach(link => {
 
 
 /* ============================================================
-   4. CAREER LOCATIONS
+   4. COMPANY LOGO CONFIGURATION
 
-   Approximate city/locality coordinates.
+   Both image files are stored in your GitHub repository:
+
+   assets/logos/fomas-group.png
+   assets/logos/aims-holding.png
+
+   Chennai      -> FOMAS
+   Villamarzana -> FOMAS
+   Jeddah       -> AIMS Holding
+============================================================ */
+
+const companyLogos = {
+  chennai: {
+    src: 'assets/logos/fomas-group.png',
+    alt: 'FOMAS Group logo',
+    className: 'logo-fomas'
+  },
+
+  villarzana: {
+    src: 'assets/logos/fomas-group.png',
+    alt: 'FOMAS Group logo',
+    className: 'logo-fomas'
+  },
+
+  jeddah: {
+    src: 'assets/logos/aims-holding.png',
+    alt: 'AIMS Holding logo',
+    className: 'logo-aims'
+  }
+};
+
+
+/* ============================================================
+   5. CAREER LOCATIONS
 ============================================================ */
 
 const careerLocations = [
@@ -131,15 +172,17 @@ const careerLocations = [
       'Heavy open-die forging, metallurgy, quality assurance and heat treatment. Returned after the Italy assignment and continued working before moving to Saudi Arabia.',
     coordinates: [13.0827, 80.2707]
   },
+
   {
     id: 'villarzana',
     number: '02',
-    name: 'Villarzana, Italy',
+    name: 'Villamarzana, Italy',
     company: 'ASFO S.p.A. · FOMAS Group',
     description:
       'International engineering training and industrial work experience, followed by a return to Chennai.',
-    coordinates: [45.95, 11.93]
+    coordinates: [45.02, 11.69]
   },
+
   {
     id: 'jeddah',
     number: '03',
@@ -153,20 +196,14 @@ const careerLocations = [
 
 
 /* ============================================================
-   5. ROUTE SETTINGS
+   6. CAREER ROUTES
 
-   CUSTOMIZATION:
+   01 -> 02 : High upward curve
+   02 -> 01 : Straight diagonal return
+   01 -> 03 : Deep downward curve
 
-   highCurveOffset:
-     Higher number = taller upward curve.
-
-   lowerCurveOffset:
-     Higher number = deeper downward curve.
-
-   Straight return route has no curve.
-
-   These are geographic control points in latitude/longitude,
-   chosen to reproduce the red-marked illustration.
+   These lines illustrate career transitions,
+   not literal flight paths.
 ============================================================ */
 
 const careerJourneys = [
@@ -174,26 +211,25 @@ const careerJourneys = [
     id: 'chennai-to-italy',
     from: 'chennai',
     to: 'villarzana',
-    label: '01 → 02 · Chennai to Villarzana',
     color: '#377eaa',
     style: 'curve',
     control: [73, 57],
     dashArray: '9, 8'
   },
+
   {
     id: 'italy-to-chennai',
     from: 'villarzana',
     to: 'chennai',
-    label: '02 → 01 · Villarzana to Chennai',
     color: '#7ba8c5',
     style: 'straight',
     dashArray: '7, 9'
   },
+
   {
     id: 'chennai-to-jeddah',
     from: 'chennai',
     to: 'jeddah',
-    label: '01 → 03 · Chennai to Jeddah',
     color: '#176c9b',
     style: 'curve',
     control: [2, 55],
@@ -205,18 +241,92 @@ const mapContainer = document.getElementById('career-map');
 
 
 /* ============================================================
-   6. MAP STYLES
+   7. INSTALL STYLES
+
+   Company logos:
+   - Top-right position
+   - Original aspect ratio preserved
+   - Responsive dimensions
+   - White FOMAS logo background
+   - Dark AIMS logo background
+
+   Map styles:
+   - Numbered markers
+   - Active states
+   - Popups
 ============================================================ */
 
-function installCareerMapStyles() {
-  if (document.getElementById('career-map-custom-styles')) {
+function installPortfolioStyles() {
+  if (document.getElementById('portfolio-career-styles')) {
     return;
   }
 
   const style = document.createElement('style');
-  style.id = 'career-map-custom-styles';
+
+  style.id = 'portfolio-career-styles';
 
   style.textContent = `
+
+    /* COMPANY CARDS */
+
+    .location-card {
+      position: relative;
+      padding-right: 125px !important;
+      overflow: hidden;
+    }
+
+    .career-company-logo {
+      position: absolute;
+      top: 24px;
+      right: 22px;
+
+      width: 88px;
+      height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 10px;
+      overflow: hidden;
+
+      border: 1px solid #e4e9ef;
+      background: #ffffff;
+
+      box-shadow: 0 3px 12px rgba(16,29,48,.05);
+
+      pointer-events: none;
+    }
+
+    .career-company-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .career-company-logo.logo-fomas {
+      background: #ffffff;
+      padding: 5px;
+    }
+
+    .career-company-logo.logo-aims {
+      background: #202020;
+      padding: 0;
+    }
+
+    .career-company-logo.logo-aims img {
+      object-fit: contain;
+    }
+
+    .location-card.active {
+      border-color: #377eaa;
+      background: #f7fbff;
+      box-shadow: 0 8px 25px rgba(55,126,170,.16);
+    }
+
+    /* CAREER MAP */
+
     #career-map {
       position: relative;
       overflow: hidden;
@@ -232,29 +342,40 @@ function installCareerMapStyles() {
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 36px;
       height: 36px;
+
       border-radius: 50%;
+
       background: #377eaa;
       color: #ffffff;
+
       border: 3px solid #ffffff;
+
       box-shadow:
         0 0 0 2px rgba(55,126,170,.4),
         0 5px 16px rgba(16,29,48,.3);
+
       font-family: Manrope, sans-serif;
       font-size: 11px;
       font-weight: 800;
+
       transition: background .2s, transform .2s;
     }
 
     #career-map .career-marker-numbered.active {
       background: #f2b85b;
       color: #101d30;
+
       box-shadow:
         0 0 0 5px rgba(242,184,91,.25),
         0 6px 20px rgba(16,29,48,.35);
+
       transform: scale(1.12);
     }
+
+    /* POPUPS */
 
     #career-map .career-map-popup {
       min-width: 190px;
@@ -283,19 +404,18 @@ function installCareerMapStyles() {
       margin: 8px 0 0;
     }
 
-    .location-card.active {
-      border-color: #377eaa;
-      background: #f7fbff;
-      box-shadow: 0 8px 25px rgba(55,126,170,.16);
-    }
+    /* CAREER SUMMARY */
 
     .career-journey-summary {
       margin-top: 24px;
       padding: 20px 24px;
+
       background: #ffffff;
+
       border: 1px solid #dce4ec;
       border-left: 4px solid #377eaa;
       border-radius: 8px;
+
       color: #536377;
       font-size: 14px;
       line-height: 1.8;
@@ -309,9 +429,12 @@ function installCareerMapStyles() {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+
       gap: 9px;
       margin-bottom: 12px;
+
       color: #377eaa;
+
       font-family: Manrope, sans-serif;
       font-size: 12px;
       font-weight: 800;
@@ -325,11 +448,46 @@ function installCareerMapStyles() {
       margin: 0;
     }
 
+    /* RESPONSIVE COMPANY LOGOS */
+
+    @media (max-width: 760px) {
+
+      .location-card {
+        padding-right: 103px !important;
+      }
+
+      .career-company-logo {
+        width: 68px;
+        height: 62px;
+
+        top: 18px;
+        right: 15px;
+
+        border-radius: 8px;
+      }
+
+    }
+
+    @media (max-width: 390px) {
+
+      .location-card {
+        padding-right: 88px !important;
+      }
+
+      .career-company-logo {
+        width: 58px;
+        height: 54px;
+        right: 12px;
+      }
+
+    }
+
     @media (prefers-reduced-motion: reduce) {
       #career-map .career-marker-numbered {
         transition: none;
       }
     }
+
   `;
 
   document.head.appendChild(style);
@@ -337,7 +495,89 @@ function installCareerMapStyles() {
 
 
 /* ============================================================
-   7. CAREER JOURNEY SUMMARY
+   8. ADD COMPANY LOGOS TO EXISTING CARDS
+
+   Does not replace or rewrite the cards.
+   Preserves their existing text and click behavior.
+============================================================ */
+
+function installCompanyLogos() {
+  const cards = document.querySelectorAll('.location-card');
+
+  cards.forEach(card => {
+    const id = card.dataset.location;
+    const config = companyLogos[id];
+
+    if (!config) return;
+
+    if (card.querySelector('.career-company-logo')) {
+      return;
+    }
+
+    const logoBox = document.createElement('div');
+
+    logoBox.className =
+      'career-company-logo ' + config.className;
+
+    const image = document.createElement('img');
+
+    image.src = config.src;
+    image.alt = config.alt;
+
+    image.loading = 'lazy';
+    image.decoding = 'async';
+
+    image.onerror = () => {
+      console.warn(
+        'Could not load company logo:',
+        config.src
+      );
+
+      logoBox.style.display = 'none';
+    };
+
+    logoBox.appendChild(image);
+    card.appendChild(logoBox);
+  });
+}
+
+
+/* ============================================================
+   9. CORRECT ITALIAN LOCATION LABELS
+
+   Updates only the displayed spelling.
+   Keeps data-location="villarzana" for compatibility.
+============================================================ */
+
+function correctItalianLocationName() {
+  const italyCard = document.querySelector(
+    '.location-card[data-location="villarzana"]'
+  );
+
+  if (!italyCard) return;
+
+  const walker = document.createTreeWalker(
+    italyCard,
+    NodeFilter.SHOW_TEXT
+  );
+
+  const textNodes = [];
+
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
+  }
+
+  textNodes.forEach(node => {
+    node.nodeValue = node.nodeValue.replace(
+      /\bVillarzana\b/g,
+      'Villamarzana'
+    );
+  });
+}
+
+
+/* ============================================================
+   10. CAREER JOURNEY SUMMARY
 ============================================================ */
 
 function addCareerJourneySummary() {
@@ -361,24 +601,35 @@ function addCareerJourneySummary() {
   const steps = document.createElement('div');
   steps.className = 'career-journey-steps';
 
-  ['Chennai', 'Villarzana', 'Chennai', 'Jeddah']
-    .forEach((name, index) => {
-      if (index > 0) {
-        const arrow = document.createElement('span');
-        arrow.className = 'step-arrow';
-        arrow.textContent = '→';
-        steps.appendChild(arrow);
-      }
+  const stageNames = [
+    'Chennai',
+    'Villamarzana',
+    'Chennai',
+    'Jeddah'
+  ];
 
-      const stage = document.createElement('span');
-      stage.textContent = name;
-      steps.appendChild(stage);
-    });
+  stageNames.forEach((name, index) => {
+    if (index > 0) {
+      const arrow = document.createElement('span');
+
+      arrow.className = 'step-arrow';
+      arrow.textContent = '→';
+
+      steps.appendChild(arrow);
+    }
+
+    const stage = document.createElement('span');
+
+    stage.textContent = name;
+    steps.appendChild(stage);
+  });
 
   const description = document.createElement('p');
 
   const heading = document.createElement('strong');
-  heading.textContent = 'My international engineering journey: ';
+
+  heading.textContent =
+    'My international engineering journey: ';
 
   description.appendChild(heading);
 
@@ -405,16 +656,19 @@ function addCareerJourneySummary() {
 
 
 /* ============================================================
-   8. LEAFLET LOADER
+   11. LOAD LEAFLET IF NECESSARY
 ============================================================ */
 
 function loadExternalStylesheet(url) {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link');
+
     link.rel = 'stylesheet';
     link.href = url;
+
     link.onload = resolve;
     link.onerror = reject;
+
     document.head.appendChild(link);
   });
 }
@@ -422,9 +676,12 @@ function loadExternalStylesheet(url) {
 function loadExternalScript(url) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
+
     script.src = url;
+
     script.onload = resolve;
     script.onerror = reject;
+
     document.head.appendChild(script);
   });
 }
@@ -454,7 +711,10 @@ async function ensureLeaflet() {
         return true;
       }
     } catch (error) {
-      console.warn('Leaflet source unavailable:', error);
+      console.warn(
+        'Leaflet source unavailable:',
+        error
+      );
     }
   }
 
@@ -463,7 +723,7 @@ async function ensureLeaflet() {
 
 
 /* ============================================================
-   9. FALLBACK MAP
+   12. FALLBACK MAP
 ============================================================ */
 
 function showFallbackMap() {
@@ -473,7 +733,9 @@ function showFallbackMap() {
 
   const iframe = document.createElement('iframe');
 
-  iframe.title = 'Geographical map of engineering experience';
+  iframe.title =
+    'Geographical map of engineering experience';
+
   iframe.src =
     'https://www.openstreetmap.org/export/embed.html' +
     '?bbox=5%2C5%2C85%2C52&layer=mapnik';
@@ -481,6 +743,7 @@ function showFallbackMap() {
   iframe.style.width = '100%';
   iframe.style.height = '100%';
   iframe.style.border = '0';
+
   iframe.loading = 'lazy';
 
   mapContainer.appendChild(iframe);
@@ -514,15 +777,14 @@ function showFallbackMap() {
 
 
 /* ============================================================
-   10. ROUTE GEOMETRY
+   13. CREATE CAREER ROUTES
 
-   Uses quadratic Bezier curves in geographical coordinates.
+   Preserves the approved route geometry.
 
-   01 -> 02: high arc through northern Asia
-   02 -> 01: direct straight line
-   01 -> 03: deep arc south of the Arabian Peninsula
+   Curved routes use quadratic Bezier interpolation.
+   Straight return uses linear interpolation.
 
-   Arrowheads follow the actual movement direction.
+   Arrowheads are aligned with travel direction.
 ============================================================ */
 
 function createCareerRoutes(map) {
@@ -542,7 +804,6 @@ function createCareerRoutes(map) {
     const end = to.coordinates;
 
     const points = [];
-
     const count = 100;
 
     for (let i = 0; i <= count; i++) {
@@ -553,8 +814,13 @@ function createCareerRoutes(map) {
       let lng;
 
       if (journey.style === 'straight') {
-        lat = start[0] + (end[0] - start[0]) * t;
-        lng = start[1] + (end[1] - start[1]) * t;
+        lat =
+          start[0] +
+          (end[0] - start[0]) * t;
+
+        lng =
+          start[1] +
+          (end[1] - start[1]) * t;
       } else {
         const control = journey.control;
 
@@ -572,14 +838,10 @@ function createCareerRoutes(map) {
       points.push(L.latLng(lat, lng));
     }
 
-    /*
-       Arrow positioned at approximately 65% of route.
-
-       Compute the direction using map pixel coordinates,
-       ensuring the arrow faces the destination.
-    */
+    /* DIRECTIONAL ARROW */
 
     const centerIndex = 65;
+
     const previous = map.latLngToLayerPoint(
       points[centerIndex - 2]
     );
@@ -598,7 +860,10 @@ function createCareerRoutes(map) {
     const distance = Math.hypot(dx, dy);
 
     if (distance < 0.001) {
-      return { points, arrow: [] };
+      return {
+        points,
+        arrow: []
+      };
     }
 
     const ux = dx / distance;
@@ -637,6 +902,9 @@ function createCareerRoutes(map) {
     return { points, arrow };
   }
 
+
+  /* CREATE ROUTE LAYERS */
+
   careerJourneys.forEach(journey => {
     const background = L.polyline([], {
       color: '#ffffff',
@@ -673,6 +941,9 @@ function createCareerRoutes(map) {
     });
   });
 
+
+  /* UPDATE ROUTES WHEN MAP CHANGES */
+
   function updateRoutes() {
     routeLayers.forEach(item => {
       const geometry = calculateGeometry(item.journey);
@@ -689,12 +960,14 @@ function createCareerRoutes(map) {
 
   updateRoutes();
 
-  return { update: updateRoutes };
+  return {
+    update: updateRoutes
+  };
 }
 
 
 /* ============================================================
-   11. INITIALIZE CAREER MAP
+   14. INITIALIZE INTERACTIVE MAP
 ============================================================ */
 
 function initializeCareerMap() {
@@ -721,22 +994,31 @@ function initializeCareerMap() {
 
   const markers = {};
   const bounds = L.latLngBounds([]);
+
   const cards = document.querySelectorAll('.location-card');
 
+
+  /* NUMBERED LOCATION ICONS */
 
   function createNumberedIcon(number, active = false) {
     return L.divIcon({
       className: 'career-marker-wrapper',
+
       html:
         '<div class="career-marker-numbered' +
         (active ? ' active' : '') +
-        '">' + number + '</div>',
+        '">' +
+        number +
+        '</div>',
+
       iconSize: [36, 36],
       iconAnchor: [18, 18],
       popupAnchor: [0, -23]
     });
   }
 
+
+  /* LOCATION SELECTION */
 
   function selectLocation(id, moveMap = true) {
     const location = careerLocations.find(
@@ -758,6 +1040,7 @@ function initializeCareerMap() {
 
     cards.forEach(card => {
       const active = card.dataset.location === id;
+
       card.classList.toggle('active', active);
       card.setAttribute('aria-pressed', String(active));
     });
@@ -783,6 +1066,8 @@ function initializeCareerMap() {
   }
 
 
+  /* MARKERS AND POPUPS */
+
   careerLocations.forEach(location => {
     const marker = L.marker(location.coordinates, {
       icon: createNumberedIcon(location.number),
@@ -803,7 +1088,11 @@ function initializeCareerMap() {
     const description = document.createElement('p');
     description.textContent = location.description;
 
-    popup.append(heading, company, description);
+    popup.append(
+      heading,
+      company,
+      description
+    );
 
     marker.bindPopup(popup);
 
@@ -816,8 +1105,12 @@ function initializeCareerMap() {
   });
 
 
+  /* ROUTES */
+
   const careerRoutes = createCareerRoutes(map);
 
+
+  /* DEFAULT VIEW */
 
   function showEntireJourney() {
     map.invalidateSize();
@@ -834,6 +1127,8 @@ function initializeCareerMap() {
   showEntireJourney();
 
 
+  /* INTERACTIVE COMPANY CARDS */
+
   cards.forEach(card => {
     card.addEventListener('click', () => {
       selectLocation(card.dataset.location, true);
@@ -848,6 +1143,8 @@ function initializeCareerMap() {
   });
 
 
+  /* RESPONSIVE MAP */
+
   window.addEventListener('resize', () => {
     map.invalidateSize();
     careerRoutes.update();
@@ -860,14 +1157,19 @@ function initializeCareerMap() {
 
 
 /* ============================================================
-   12. START MAP AND CAREER SUMMARY
+   15. START PORTFOLIO FEATURES
 ============================================================ */
 
 async function startCareerMap() {
-  if (!mapContainer) return;
+  installPortfolioStyles();
 
-  installCareerMapStyles();
+  installCompanyLogos();
+
+  correctItalianLocationName();
+
   addCareerJourneySummary();
+
+  if (!mapContainer) return;
 
   mapContainer.textContent = 'Loading geographical map…';
 
@@ -880,9 +1182,15 @@ async function startCareerMap() {
 
   try {
     mapContainer.replaceChildren();
+
     initializeCareerMap();
+
   } catch (error) {
-    console.error('Career map initialization failed:', error);
+    console.error(
+      'Career map initialization failed:',
+      error
+    );
+
     showFallbackMap();
   }
 }
