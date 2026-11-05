@@ -2,9 +2,19 @@
 'use strict';
 
 /* ==========================================================
-   MOHAMMED BURHANUDDEEN R. — PORTFOLIO
-   Navigation, resume download and global career map
+   MOHAMMED BURHANUDDEEN R.
+   PROFESSIONAL ENGINEERING PORTFOLIO
+
+   Features:
+   - Mobile navigation
+   - Automatic copyright year
+   - Original PDF resume download
+   - Interactive global career map
+   - Numbered location markers
+   - Curved directional career paths
+   - Interactive location cards
 ========================================================== */
+
 
 /* ==========================================================
    1. MOBILE NAVIGATION
@@ -30,6 +40,7 @@ if (toggle && links) {
   });
 }
 
+
 /* ==========================================================
    2. FOOTER YEAR
 ========================================================== */
@@ -40,15 +51,18 @@ if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
 
+
 /* ==========================================================
    3. ORIGINAL RESUME DOWNLOAD
 
-   Keeps the original PDF unchanged.
-   Finds the single PDF inside assets/cv/
-   regardless of its filename.
+   The original resume PDF is never modified.
+
+   Keep exactly one PDF inside assets/cv/.
+   Its filename may change whenever you update it.
 ========================================================== */
 
 document.querySelectorAll('.resume-download').forEach(link => {
+
   link.addEventListener('click', async event => {
     event.preventDefault();
 
@@ -90,6 +104,7 @@ document.querySelectorAll('.resume-download').forEach(link => {
       );
 
       const a = document.createElement('a');
+
       a.href = downloadUrl.href;
       a.download = filename;
 
@@ -107,13 +122,14 @@ document.querySelectorAll('.resume-download').forEach(link => {
       link.textContent = originalLabel;
     }
   });
+
 });
+
 
 /* ==========================================================
    4. GLOBAL CAREER LOCATIONS
 
-   Coordinates represent approximate locations.
-   The route indicates career progression, not travel.
+   Approximate geographical coordinates.
 ========================================================== */
 
 const careerLocations = [
@@ -126,6 +142,7 @@ const careerLocations = [
       'Heavy open-die forging, metallurgy, quality assurance and heat treatment.',
     coordinates: [13.0827, 80.2707]
   },
+
   {
     id: 'villarzana',
     number: '02',
@@ -135,6 +152,7 @@ const careerLocations = [
       'International engineering training and industrial work experience.',
     coordinates: [45.95, 11.93]
   },
+
   {
     id: 'jeddah',
     number: '03',
@@ -148,11 +166,11 @@ const careerLocations = [
 
 const mapContainer = document.getElementById('career-map');
 
-/* ==========================================================
-   5. LOAD LEAFLET CSS AND JAVASCRIPT
 
-   Uses the Leaflet files already included in index.html.
-   Alternative providers are available if needed.
+/* ==========================================================
+   5. LEAFLET FALLBACK LOADER
+
+   Normally Leaflet is loaded by index.html.
 ========================================================== */
 
 function loadExternalStylesheet(url) {
@@ -215,18 +233,22 @@ async function ensureLeaflet() {
   return false;
 }
 
-/* ==========================================================
-   6. MAP-SPECIFIC DESIGN
 
-   Does not modify the rest of the portfolio.
+/* ==========================================================
+   6. CAREER MAP STYLES
+
+   These styles apply only to the career map.
+   No changes to styles.css are required.
 ========================================================== */
 
 function installCareerMapStyles() {
+
   if (document.getElementById('career-map-upgrade-styles')) {
     return;
   }
 
   const style = document.createElement('style');
+
   style.id = 'career-map-upgrade-styles';
 
   style.textContent = `
@@ -234,15 +256,6 @@ function installCareerMapStyles() {
       position: relative;
       overflow: hidden;
       background: #dce6ed;
-    }
-
-    #career-map .leaflet-container {
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    #career-map .leaflet-div-icon {
-      background: transparent;
-      border: none;
     }
 
     #career-map .career-marker-wrapper {
@@ -314,16 +327,12 @@ function installCareerMapStyles() {
       box-shadow: 0 8px 25px rgba(55,126,170,.16);
     }
 
-    .location-card.active .location-number {
-      color: #176895;
+    #career-map .career-route {
+      pointer-events: none;
     }
 
-    .location-card.active .location-arrow {
-      color: #176895;
-    }
-
-    #career-map .leaflet-control-zoom a {
-      color: #101d30;
+    #career-map .career-route-arrow {
+      pointer-events: none;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -336,13 +345,15 @@ function installCareerMapStyles() {
   document.head.appendChild(style);
 }
 
+
 /* ==========================================================
    7. FALLBACK MAP
 
-   Used only if Leaflet is unavailable.
+   Displays OpenStreetMap if Leaflet is unavailable.
 ========================================================== */
 
 function showFallbackMap() {
+
   if (!mapContainer) return;
 
   mapContainer.replaceChildren();
@@ -350,6 +361,7 @@ function showFallbackMap() {
   const iframe = document.createElement('iframe');
 
   iframe.title = 'Geographical map of engineering experience';
+
   iframe.src =
     'https://www.openstreetmap.org/export/embed.html' +
     '?bbox=5%2C5%2C85%2C52&layer=mapnik';
@@ -364,7 +376,9 @@ function showFallbackMap() {
   const cards = document.querySelectorAll('.location-card');
 
   cards.forEach(card => {
+
     card.addEventListener('click', () => {
+
       const location = careerLocations.find(
         item => item.id === card.dataset.location
       );
@@ -393,15 +407,228 @@ function showFallbackMap() {
         item.classList.toggle('active', active);
         item.setAttribute('aria-pressed', String(active));
       });
+
     });
+
   });
 }
 
+
 /* ==========================================================
-   8. INITIALIZE INTERACTIVE CAREER MAP
+   8. CURVED GEOGRAPHICAL PATHS
+
+   Uses quadratic Bezier curves.
+
+   Each path is generated from geographic coordinates
+   and recalculated as the map zooms or moves.
+
+   The curve is visual career progression,
+   not an actual travel route.
+========================================================== */
+
+function createCurvedCareerRoute(map, locations) {
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  const overlay = L.svg({
+    padding: 0.5,
+    interactive: false
+  }).addTo(map);
+
+  const renderer = overlay._container;
+
+  if (!renderer) return;
+
+  const routeGroup = document.createElementNS(svgNS, 'g');
+
+  routeGroup.setAttribute('class', 'career-route');
+  renderer.appendChild(routeGroup);
+
+  const segments = [];
+
+  function createSVGElement(tag, attributes = {}) {
+    const element = document.createElementNS(svgNS, tag);
+
+    Object.entries(attributes).forEach(([key, value]) => {
+      element.setAttribute(key, String(value));
+    });
+
+    return element;
+  }
+
+  for (let i = 0; i < locations.length - 1; i++) {
+
+    const background = createSVGElement('path', {
+      fill: 'none',
+      stroke: '#ffffff',
+      'stroke-width': 6,
+      'stroke-linecap': 'round',
+      opacity: 0.9
+    });
+
+    const route = createSVGElement('path', {
+      fill: 'none',
+      stroke: '#377eaa',
+      'stroke-width': 3,
+      'stroke-dasharray': '8 9',
+      'stroke-linecap': 'round',
+      opacity: 0.95
+    });
+
+    const arrow = createSVGElement('path', {
+      fill: '#377eaa',
+      stroke: '#ffffff',
+      'stroke-width': 1.5,
+      'stroke-linejoin': 'round',
+      class: 'career-route-arrow'
+    });
+
+    routeGroup.appendChild(background);
+    routeGroup.appendChild(route);
+    routeGroup.appendChild(arrow);
+
+    segments.push({
+      start: locations[i],
+      end: locations[i + 1],
+      background,
+      route,
+      arrow,
+      index: i
+    });
+  }
+
+  function updateRoutes() {
+
+    segments.forEach(segment => {
+
+      const start = map.latLngToLayerPoint(
+        segment.start.coordinates
+      );
+
+      const end = map.latLngToLayerPoint(
+        segment.end.coordinates
+      );
+
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 1) return;
+
+      const midpointX = (start.x + end.x) / 2;
+      const midpointY = (start.y + end.y) / 2;
+
+      const normalX = -dy / distance;
+      const normalY = dx / distance;
+
+      /*
+         Curve direction:
+         First segment curves northward.
+         Second segment curves eastward.
+
+         The curvature scales with map distance.
+      */
+
+      const curveAmount = Math.min(
+        Math.max(distance * 0.18, 25),
+        110
+      );
+
+      const direction = segment.index === 0 ? -1 : 1;
+
+      const controlX =
+        midpointX + normalX * curveAmount * direction;
+
+      const controlY =
+        midpointY + normalY * curveAmount * direction;
+
+      const pathData =
+        `M ${start.x} ${start.y} ` +
+        `Q ${controlX} ${controlY} ${end.x} ${end.y}`;
+
+      segment.background.setAttribute('d', pathData);
+      segment.route.setAttribute('d', pathData);
+
+      /*
+         Arrowhead positioned at 75% of the curve.
+         Its direction follows the curve tangent.
+      */
+
+      const t = 0.75;
+      const oneMinusT = 1 - t;
+
+      const arrowX =
+        oneMinusT * oneMinusT * start.x +
+        2 * oneMinusT * t * controlX +
+        t * t * end.x;
+
+      const arrowY =
+        oneMinusT * oneMinusT * start.y +
+        2 * oneMinusT * t * controlY +
+        t * t * end.y;
+
+      const tangentX =
+        2 * oneMinusT * (controlX - start.x) +
+        2 * t * (end.x - controlX);
+
+      const tangentY =
+        2 * oneMinusT * (controlY - start.y) +
+        2 * t * (end.y - controlY);
+
+      const tangentLength = Math.sqrt(
+        tangentX * tangentX + tangentY * tangentY
+      );
+
+      if (tangentLength < 1) return;
+
+      const unitX = tangentX / tangentLength;
+      const unitY = tangentY / tangentLength;
+
+      const perpendicularX = -unitY;
+      const perpendicularY = unitX;
+
+      const arrowLength = 15;
+      const arrowWidth = 7;
+
+      const tipX = arrowX + unitX * arrowLength / 2;
+      const tipY = arrowY + unitY * arrowLength / 2;
+
+      const baseX = arrowX - unitX * arrowLength / 2;
+      const baseY = arrowY - unitY * arrowLength / 2;
+
+      const leftX = baseX + perpendicularX * arrowWidth;
+      const leftY = baseY + perpendicularY * arrowWidth;
+
+      const rightX = baseX - perpendicularX * arrowWidth;
+      const rightY = baseY - perpendicularY * arrowWidth;
+
+      const arrowData =
+        `M ${tipX} ${tipY} ` +
+        `L ${leftX} ${leftY} ` +
+        `L ${rightX} ${rightY} Z`;
+
+      segment.arrow.setAttribute('d', arrowData);
+
+    });
+  }
+
+  map.on('moveend zoomend resize viewreset', updateRoutes);
+
+  requestAnimationFrame(updateRoutes);
+
+  return {
+    update: updateRoutes
+  };
+}
+
+
+/* ==========================================================
+   9. INITIALIZE INTERACTIVE CAREER MAP
 ========================================================== */
 
 function initializeCareerMap() {
+
   if (!mapContainer || typeof window.L === 'undefined') {
     return;
   }
@@ -427,49 +654,36 @@ function initializeCareerMap() {
   const bounds = L.latLngBounds([]);
   const cards = document.querySelectorAll('.location-card');
 
-  /* Numbered marker design */
+
+  /* ========================================================
+     NUMBERED MARKER ICONS
+  ======================================================== */
 
   function createNumberedIcon(number, active = false) {
+
     return L.divIcon({
       className: 'career-marker-wrapper',
+
       html:
         '<div class="career-marker-numbered' +
         (active ? ' active' : '') +
         '">' +
         number +
         '</div>',
+
       iconSize: [36, 36],
       iconAnchor: [18, 18],
       popupAnchor: [0, -23]
     });
   }
 
-  /* Career progression route */
 
-  const routeCoordinates = careerLocations.map(
-    location => location.coordinates
-  );
-
-  L.polyline(routeCoordinates, {
-    color: '#ffffff',
-    weight: 6,
-    opacity: 0.85,
-    interactive: false,
-    lineJoin: 'round'
-  }).addTo(map);
-
-  L.polyline(routeCoordinates, {
-    color: '#377eaa',
-    weight: 3,
-    opacity: 0.85,
-    dashArray: '7, 10',
-    interactive: false,
-    lineJoin: 'round'
-  }).addTo(map);
-
-  /* Selection and card highlighting */
+  /* ========================================================
+     LOCATION SELECTION
+  ======================================================== */
 
   function selectLocation(id, moveMap = true) {
+
     const location = careerLocations.find(
       item => item.id === id
     );
@@ -479,21 +693,22 @@ function initializeCareerMap() {
     if (!location || !marker) return;
 
     careerLocations.forEach(item => {
-      const isActive = item.id === id;
+      const active = item.id === id;
 
       markers[item.id].setIcon(
-        createNumberedIcon(item.number, isActive)
+        createNumberedIcon(item.number, active)
       );
     });
 
     cards.forEach(card => {
-      const isActive = card.dataset.location === id;
+      const active = card.dataset.location === id;
 
-      card.classList.toggle('active', isActive);
-      card.setAttribute('aria-pressed', String(isActive));
+      card.classList.toggle('active', active);
+      card.setAttribute('aria-pressed', String(active));
     });
 
     if (moveMap) {
+
       const reducedMotion = window.matchMedia(
         '(prefers-reduced-motion: reduce)'
       ).matches;
@@ -513,9 +728,13 @@ function initializeCareerMap() {
     marker.openPopup();
   }
 
-  /* Add markers and popups */
+
+  /* ========================================================
+     ADD MARKERS AND POPUPS
+  ======================================================== */
 
   careerLocations.forEach(location => {
+
     const marker = L.marker(location.coordinates, {
       icon: createNumberedIcon(location.number),
       keyboard: true,
@@ -544,12 +763,27 @@ function initializeCareerMap() {
     });
 
     markers[location.id] = marker;
+
     bounds.extend(location.coordinates);
   });
 
-  /* Show all three locations on initial load */
+
+  /* ========================================================
+     ADD CURVED DIRECTIONAL PATHS
+  ======================================================== */
+
+  const careerRoute = createCurvedCareerRoute(
+    map,
+    careerLocations
+  );
+
+
+  /* ========================================================
+     SHOW COMPLETE JOURNEY
+  ======================================================== */
 
   function showEntireJourney() {
+
     map.invalidateSize();
 
     map.fitBounds(bounds, {
@@ -557,17 +791,27 @@ function initializeCareerMap() {
       maxZoom: 5,
       animate: false
     });
+
+    if (careerRoute) {
+      careerRoute.update();
+    }
   }
 
   showEntireJourney();
 
-  /* Make the location cards interactive */
+
+  /* ========================================================
+     LOCATION CARD INTERACTIONS
+  ======================================================== */
 
   cards.forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.location;
 
-      selectLocation(id, true);
+    card.addEventListener('click', () => {
+
+      selectLocation(
+        card.dataset.location,
+        true
+      );
 
       if (window.innerWidth <= 760) {
         mapContainer.scrollIntoView({
@@ -575,13 +819,22 @@ function initializeCareerMap() {
           block: 'center'
         });
       }
+
     });
+
   });
 
-  /* Keep the map correctly sized */
+
+  /* ========================================================
+     RESIZE AND INITIAL RENDER
+  ======================================================== */
 
   window.addEventListener('resize', () => {
     map.invalidateSize();
+
+    if (careerRoute) {
+      careerRoute.update();
+    }
   });
 
   requestAnimationFrame(() => {
@@ -592,18 +845,15 @@ function initializeCareerMap() {
     showEntireJourney();
   }, 350);
 
-  /* Optional double-click to reset the entire journey */
-
-  map.on('dblclick', () => {
-    showEntireJourney();
-  });
 }
 
+
 /* ==========================================================
-   9. START CAREER MAP
+   10. START MAP
 ========================================================== */
 
 async function startCareerMap() {
+
   if (!mapContainer) return;
 
   installCareerMapStyles();
