@@ -2,6 +2,11 @@
 'use strict';
 
 /* ==========================================================
+   MOHAMMED BURHANUDDEEN R. — PORTFOLIO
+   Navigation, resume download and global career map
+========================================================== */
+
+/* ==========================================================
    1. MOBILE NAVIGATION
 ========================================================== */
 
@@ -11,6 +16,7 @@ const links = document.querySelector('.nav-links');
 if (toggle && links) {
   toggle.addEventListener('click', () => {
     const isOpen = links.classList.toggle('open');
+
     toggle.setAttribute('aria-expanded', String(isOpen));
     toggle.textContent = isOpen ? '✕' : '☰';
   });
@@ -36,7 +42,10 @@ if (yearElement) {
 
 /* ==========================================================
    3. ORIGINAL RESUME DOWNLOAD
-   Keeps your existing single-PDF system unchanged.
+
+   Keeps the original PDF unchanged.
+   Finds the single PDF inside assets/cv/
+   regardless of its filename.
 ========================================================== */
 
 document.querySelectorAll('.resume-download').forEach(link => {
@@ -101,250 +110,134 @@ document.querySelectorAll('.resume-download').forEach(link => {
 });
 
 /* ==========================================================
-   4. CAREER LOCATIONS
+   4. GLOBAL CAREER LOCATIONS
+
+   Coordinates represent approximate locations.
+   The route indicates career progression, not travel.
 ========================================================== */
 
-const careerLocations = {
-  chennai: {
+const careerLocations = [
+  {
+    id: 'chennai',
+    number: '01',
     name: 'Chennai, India',
     company: 'Bay Forge Ltd · FOMAS Group',
     description:
       'Heavy open-die forging, metallurgy, quality assurance and heat treatment.',
     coordinates: [13.0827, 80.2707]
   },
-
-  villarzana: {
+  {
+    id: 'villarzana',
+    number: '02',
     name: 'Villarzana, Italy',
     company: 'ASFO S.p.A. · FOMAS Group',
     description:
       'International engineering training and industrial work experience.',
     coordinates: [45.95, 11.93]
   },
-
-  jeddah: {
+  {
+    id: 'jeddah',
+    number: '03',
     name: 'Jeddah, Saudi Arabia',
     company: 'ALIF · AIMS Group',
     description:
       'Manufacturing quality, fastener production and quality analytics.',
     coordinates: [21.5433, 39.1728]
   }
-};
+];
 
 const mapContainer = document.getElementById('career-map');
 
 /* ==========================================================
-   5. LEAFLET CSS REPAIR
+   5. LOAD LEAFLET CSS AND JAVASCRIPT
 
-   Applies essential positioning rules locally.
-   This prevents scattered tiles and invisible markers.
+   Uses the Leaflet files already included in index.html.
+   Alternative providers are available if needed.
 ========================================================== */
 
-function installLeafletLayoutFix() {
-  if (document.getElementById('leaflet-layout-fix')) return;
+function loadExternalStylesheet(url) {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+
+    link.rel = 'stylesheet';
+    link.href = url;
+
+    link.onload = resolve;
+    link.onerror = reject;
+
+    document.head.appendChild(link);
+  });
+}
+
+function loadExternalScript(url) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+
+    script.src = url;
+    script.async = true;
+
+    script.onload = resolve;
+    script.onerror = reject;
+
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureLeaflet() {
+  if (typeof window.L !== 'undefined') {
+    return true;
+  }
+
+  const providers = [
+    {
+      css: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css',
+      js: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'
+    },
+    {
+      css: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css',
+      js: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
+    }
+  ];
+
+  for (const provider of providers) {
+    try {
+      await loadExternalStylesheet(provider.css);
+      await loadExternalScript(provider.js);
+
+      if (typeof window.L !== 'undefined') {
+        return true;
+      }
+    } catch (error) {
+      console.warn('Leaflet provider unavailable:', error);
+    }
+  }
+
+  return false;
+}
+
+/* ==========================================================
+   6. MAP-SPECIFIC DESIGN
+
+   Does not modify the rest of the portfolio.
+========================================================== */
+
+function installCareerMapStyles() {
+  if (document.getElementById('career-map-upgrade-styles')) {
+    return;
+  }
 
   const style = document.createElement('style');
-  style.id = 'leaflet-layout-fix';
+  style.id = 'career-map-upgrade-styles';
 
   style.textContent = `
     #career-map {
-      position: relative !important;
-      overflow: hidden !important;
-      width: 100% !important;
-      height: 485px !important;
-      background: #dce6ed;
-      z-index: 1;
-    }
-
-    #career-map .leaflet-pane,
-    #career-map .leaflet-tile,
-    #career-map .leaflet-marker-icon,
-    #career-map .leaflet-marker-shadow,
-    #career-map .leaflet-tile-container,
-    #career-map .leaflet-pane > svg,
-    #career-map .leaflet-pane > canvas {
-      position: absolute !important;
-      left: 0;
-      top: 0;
-    }
-
-    #career-map .leaflet-map-pane,
-    #career-map .leaflet-tile-pane,
-    #career-map .leaflet-overlay-pane,
-    #career-map .leaflet-shadow-pane,
-    #career-map .leaflet-marker-pane,
-    #career-map .leaflet-tooltip-pane,
-    #career-map .leaflet-popup-pane {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-
-    #career-map .leaflet-tile {
-      visibility: inherit;
-      max-width: none !important;
-      max-height: none !important;
-      width: 256px;
-      height: 256px;
-      border: 0;
-      padding: 0;
-    }
-
-    #career-map .leaflet-container img {
-      max-width: none !important;
-      max-height: none !important;
-    }
-
-    #career-map .leaflet-tile-container {
-      pointer-events: none;
-    }
-
-    #career-map .leaflet-pane {
-      z-index: 400;
-    }
-
-    #career-map .leaflet-tile-pane {
-      z-index: 200;
-    }
-
-    #career-map .leaflet-overlay-pane {
-      z-index: 400;
-    }
-
-    #career-map .leaflet-shadow-pane {
-      z-index: 500;
-    }
-
-    #career-map .leaflet-marker-pane {
-      z-index: 600;
-    }
-
-    #career-map .leaflet-tooltip-pane {
-      z-index: 650;
-    }
-
-    #career-map .leaflet-popup-pane {
-      z-index: 700;
-    }
-
-    #career-map .leaflet-control {
       position: relative;
-      z-index: 800;
-      pointer-events: auto;
-    }
-
-    #career-map .leaflet-top,
-    #career-map .leaflet-bottom {
-      position: absolute;
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    #career-map .leaflet-top {
-      top: 0;
-    }
-
-    #career-map .leaflet-bottom {
-      bottom: 0;
-    }
-
-    #career-map .leaflet-left {
-      left: 0;
-    }
-
-    #career-map .leaflet-right {
-      right: 0;
-    }
-
-    #career-map .leaflet-top .leaflet-control {
-      margin-top: 12px;
-    }
-
-    #career-map .leaflet-left .leaflet-control {
-      margin-left: 12px;
-    }
-
-    #career-map .leaflet-right .leaflet-control {
-      margin-right: 12px;
-    }
-
-    #career-map .leaflet-bottom .leaflet-control {
-      margin-bottom: 12px;
-    }
-
-    #career-map .leaflet-control-zoom {
-      border: 2px solid rgba(0,0,0,.15);
-      border-radius: 5px;
       overflow: hidden;
+      background: #dce6ed;
     }
 
-    #career-map .leaflet-control-zoom a {
-      display: block;
-      width: 32px;
-      height: 32px;
-      line-height: 30px;
-      text-align: center;
-      background: white;
-      color: #101d30;
-      font-size: 21px;
-      font-weight: 700;
-      border-bottom: 1px solid #ddd;
-    }
-
-    #career-map .leaflet-control-attribution {
-      background: rgba(255,255,255,.85);
-      padding: 2px 6px;
-      font-size: 10px;
-      color: #333;
-    }
-
-    #career-map .leaflet-control-attribution a {
-      color: #377eaa;
-    }
-
-    #career-map .leaflet-popup {
-      position: absolute;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #career-map .leaflet-popup-content-wrapper {
-      background: white;
-      border-radius: 9px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.22);
-      text-align: left;
-    }
-
-    #career-map .leaflet-popup-content {
-      margin: 15px 18px;
-      line-height: 1.5;
-    }
-
-    #career-map .leaflet-popup-tip-container {
-      width: 40px;
-      height: 20px;
-      position: absolute;
-      left: 50%;
-      margin-left: -20px;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    #career-map .leaflet-popup-tip {
-      width: 17px;
-      height: 17px;
-      background: white;
-      transform: rotate(45deg);
-      margin: -10px auto 0;
-      box-shadow: 0 3px 12px rgba(0,0,0,.12);
-    }
-
-    #career-map .leaflet-popup-close-button {
-      position: absolute;
-      top: 4px;
-      right: 8px;
-      font-size: 20px;
-      color: #637286;
-      z-index: 2;
+    #career-map .leaflet-container {
+      font-family: 'DM Sans', sans-serif;
     }
 
     #career-map .leaflet-div-icon {
@@ -352,48 +245,90 @@ function installLeafletLayoutFix() {
       border: none;
     }
 
-    #career-map .career-marker {
-      width: 22px;
-      height: 22px;
-      background: #377eaa;
-      border: 4px solid white;
-      border-radius: 50%;
-      box-shadow: 0 0 0 2px #377eaa, 0 4px 14px #0004;
+    #career-map .career-marker-wrapper {
+      background: transparent;
+      border: none;
     }
 
-    #career-map .career-marker.selected {
+    #career-map .career-marker-numbered {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #377eaa;
+      border: 3px solid #ffffff;
+      box-shadow:
+        0 0 0 2px rgba(55,126,170,.4),
+        0 5px 16px rgba(16,29,48,.3);
+      color: #ffffff;
+      font-family: Manrope, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      transition:
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+    }
+
+    #career-map .career-marker-numbered.active {
       background: #f2b85b;
-      box-shadow: 0 0 0 3px #f2b85b, 0 4px 18px #0005;
+      color: #101d30;
+      box-shadow:
+        0 0 0 5px rgba(242,184,91,.25),
+        0 6px 20px rgba(16,29,48,.35);
+      transform: scale(1.12);
     }
 
     #career-map .career-map-popup {
-      min-width: 180px;
+      min-width: 190px;
       font-family: 'DM Sans', sans-serif;
     }
 
     #career-map .career-map-popup strong {
       display: block;
-      color: #101d30;
       font-size: 15px;
+      font-weight: 800;
+      color: #101d30;
+      margin-bottom: 5px;
     }
 
     #career-map .career-map-popup span {
       display: block;
-      color: #377eaa;
       font-size: 12px;
       font-weight: 700;
-      margin-top: 4px;
+      color: #377eaa;
     }
 
     #career-map .career-map-popup p {
-      color: #637286;
       font-size: 12px;
-      margin: 7px 0 0;
+      line-height: 1.6;
+      color: #637286;
+      margin: 8px 0 0;
     }
 
-    @media (max-width: 760px) {
-      #career-map {
-        height: 380px !important;
+    .location-card.active {
+      border-color: #377eaa;
+      background: #f7fbff;
+      box-shadow: 0 8px 25px rgba(55,126,170,.16);
+    }
+
+    .location-card.active .location-number {
+      color: #176895;
+    }
+
+    .location-card.active .location-arrow {
+      color: #176895;
+    }
+
+    #career-map .leaflet-control-zoom a {
+      color: #101d30;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #career-map .career-marker-numbered {
+        transition: none;
       }
     }
   `;
@@ -402,44 +337,9 @@ function installLeafletLayoutFix() {
 }
 
 /* ==========================================================
-   6. LOAD LEAFLET IF NECESSARY
-========================================================== */
-
-function loadExternalScript(url) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = url;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-async function ensureLeaflet() {
-  if (typeof window.L !== 'undefined') return true;
-
-  const sources = [
-    'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
-  ];
-
-  for (const source of sources) {
-    try {
-      await loadExternalScript(source);
-
-      if (typeof window.L !== 'undefined') {
-        return true;
-      }
-    } catch (error) {
-      console.warn('Leaflet source unavailable:', source);
-    }
-  }
-
-  return false;
-}
-
-/* ==========================================================
    7. FALLBACK MAP
+
+   Used only if Leaflet is unavailable.
 ========================================================== */
 
 function showFallbackMap() {
@@ -448,6 +348,7 @@ function showFallbackMap() {
   mapContainer.replaceChildren();
 
   const iframe = document.createElement('iframe');
+
   iframe.title = 'Geographical map of engineering experience';
   iframe.src =
     'https://www.openstreetmap.org/export/embed.html' +
@@ -460,9 +361,13 @@ function showFallbackMap() {
 
   mapContainer.appendChild(iframe);
 
-  document.querySelectorAll('.location-card').forEach(card => {
+  const cards = document.querySelectorAll('.location-card');
+
+  cards.forEach(card => {
     card.addEventListener('click', () => {
-      const location = careerLocations[card.dataset.location];
+      const location = careerLocations.find(
+        item => item.id === card.dataset.location
+      );
 
       if (!location) return;
 
@@ -482,8 +387,9 @@ function showFallbackMap() {
         '&layer=mapnik' +
         '&marker=' + encodeURIComponent(lat + ',' + lon);
 
-      document.querySelectorAll('.location-card').forEach(item => {
+      cards.forEach(item => {
         const active = item === card;
+
         item.classList.toggle('active', active);
         item.setAttribute('aria-pressed', String(active));
       });
@@ -492,10 +398,14 @@ function showFallbackMap() {
 }
 
 /* ==========================================================
-   8. INITIALIZE CAREER MAP
+   8. INITIALIZE INTERACTIVE CAREER MAP
 ========================================================== */
 
 function initializeCareerMap() {
+  if (!mapContainer || typeof window.L === 'undefined') {
+    return;
+  }
+
   const map = L.map(mapContainer, {
     center: [30, 43],
     zoom: 3,
@@ -517,51 +427,100 @@ function initializeCareerMap() {
   const bounds = L.latLngBounds([]);
   const cards = document.querySelectorAll('.location-card');
 
-  function markerIcon(selected = false) {
+  /* Numbered marker design */
+
+  function createNumberedIcon(number, active = false) {
     return L.divIcon({
       className: 'career-marker-wrapper',
       html:
-        '<div class="career-marker' +
-        (selected ? ' selected' : '') +
-        '"></div>',
-      iconSize: [22, 22],
-      iconAnchor: [11, 11],
-      popupAnchor: [0, -15]
+        '<div class="career-marker-numbered' +
+        (active ? ' active' : '') +
+        '">' +
+        number +
+        '</div>',
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+      popupAnchor: [0, -23]
     });
   }
 
-  function selectLocation(key, moveMap = true) {
-    const location = careerLocations[key];
-    const marker = markers[key];
+  /* Career progression route */
+
+  const routeCoordinates = careerLocations.map(
+    location => location.coordinates
+  );
+
+  L.polyline(routeCoordinates, {
+    color: '#ffffff',
+    weight: 6,
+    opacity: 0.85,
+    interactive: false,
+    lineJoin: 'round'
+  }).addTo(map);
+
+  L.polyline(routeCoordinates, {
+    color: '#377eaa',
+    weight: 3,
+    opacity: 0.85,
+    dashArray: '7, 10',
+    interactive: false,
+    lineJoin: 'round'
+  }).addTo(map);
+
+  /* Selection and card highlighting */
+
+  function selectLocation(id, moveMap = true) {
+    const location = careerLocations.find(
+      item => item.id === id
+    );
+
+    const marker = markers[id];
 
     if (!location || !marker) return;
 
-    Object.keys(markers).forEach(markerKey => {
-      markers[markerKey].setIcon(
-        markerIcon(markerKey === key)
+    careerLocations.forEach(item => {
+      const isActive = item.id === id;
+
+      markers[item.id].setIcon(
+        createNumberedIcon(item.number, isActive)
       );
     });
 
     cards.forEach(card => {
-      const active = card.dataset.location === key;
+      const isActive = card.dataset.location === id;
 
-      card.classList.toggle('active', active);
-      card.setAttribute('aria-pressed', String(active));
+      card.classList.toggle('active', isActive);
+      card.setAttribute('aria-pressed', String(isActive));
     });
 
     if (moveMap) {
-      map.flyTo(location.coordinates, 6, {
-        animate: true,
-        duration: 1.2
-      });
+      const reducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      if (reducedMotion) {
+        map.setView(location.coordinates, 6, {
+          animate: false
+        });
+      } else {
+        map.flyTo(location.coordinates, 6, {
+          animate: true,
+          duration: 1.1
+        });
+      }
     }
 
     marker.openPopup();
   }
 
-  Object.entries(careerLocations).forEach(([key, location]) => {
+  /* Add markers and popups */
+
+  careerLocations.forEach(location => {
     const marker = L.marker(location.coordinates, {
-      icon: markerIcon()
+      icon: createNumberedIcon(location.number),
+      keyboard: true,
+      title: location.name,
+      alt: location.name
     }).addTo(map);
 
     const popup = document.createElement('div');
@@ -581,21 +540,34 @@ function initializeCareerMap() {
     marker.bindPopup(popup);
 
     marker.on('click', () => {
-      selectLocation(key, false);
+      selectLocation(location.id, false);
     });
 
-    markers[key] = marker;
+    markers[location.id] = marker;
     bounds.extend(location.coordinates);
   });
 
-  map.fitBounds(bounds, {
-    padding: [40, 40],
-    maxZoom: 5
-  });
+  /* Show all three locations on initial load */
+
+  function showEntireJourney() {
+    map.invalidateSize();
+
+    map.fitBounds(bounds, {
+      padding: [45, 45],
+      maxZoom: 5,
+      animate: false
+    });
+  }
+
+  showEntireJourney();
+
+  /* Make the location cards interactive */
 
   cards.forEach(card => {
     card.addEventListener('click', () => {
-      selectLocation(card.dataset.location, true);
+      const id = card.dataset.location;
+
+      selectLocation(id, true);
 
       if (window.innerWidth <= 760) {
         mapContainer.scrollIntoView({
@@ -606,33 +578,35 @@ function initializeCareerMap() {
     });
   });
 
+  /* Keep the map correctly sized */
+
   window.addEventListener('resize', () => {
     map.invalidateSize();
   });
 
   requestAnimationFrame(() => {
-    map.invalidateSize();
-
-    map.fitBounds(bounds, {
-      padding: [40, 40],
-      maxZoom: 5,
-      animate: false
-    });
+    showEntireJourney();
   });
 
   setTimeout(() => {
-    map.invalidateSize();
-  }, 500);
+    showEntireJourney();
+  }, 350);
+
+  /* Optional double-click to reset the entire journey */
+
+  map.on('dblclick', () => {
+    showEntireJourney();
+  });
 }
 
 /* ==========================================================
-   9. START THE MAP
+   9. START CAREER MAP
 ========================================================== */
 
 async function startCareerMap() {
   if (!mapContainer) return;
 
-  installLeafletLayoutFix();
+  installCareerMapStyles();
 
   mapContainer.textContent = 'Loading geographical map…';
 
