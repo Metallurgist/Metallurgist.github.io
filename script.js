@@ -2,12 +2,20 @@
 'use strict';
 
 /* ============================================================
-   MOHAMMED BURHANUDDEEN R. — PORTFOLIO SCRIPT
+   MOHAMMED BURHANUDDEEN R. — PROFESSIONAL PORTFOLIO
 
    Global engineering journey:
    Chennai -> Villarzana -> Chennai -> Jeddah
 
-   Three map locations, four career stages.
+   Features:
+   - Mobile navigation
+   - Automatic copyright year
+   - Original PDF resume download
+   - Interactive Leaflet map
+   - Numbered location markers
+   - Three curved directional journeys
+   - Interactive location cards
+   - Professional career journey explanation
 ============================================================ */
 
 
@@ -21,6 +29,7 @@ const links = document.querySelector('.nav-links');
 if (toggle && links) {
   toggle.addEventListener('click', () => {
     const isOpen = links.classList.toggle('open');
+
     toggle.setAttribute('aria-expanded', String(isOpen));
     toggle.textContent = isOpen ? '✕' : '☰';
   });
@@ -49,9 +58,8 @@ if (yearElement) {
 /* ============================================================
    3. ORIGINAL RESUME DOWNLOAD
 
-   Finds the single PDF inside assets/cv/.
-   You can change the PDF filename at any time.
-   Your original resume file is never modified.
+   Keep exactly one original PDF inside assets/cv/.
+   The filename may change when you update the resume.
 ============================================================ */
 
 document.querySelectorAll('.resume-download').forEach(link => {
@@ -154,15 +162,20 @@ const careerLocations = [
 
 
 /* ============================================================
-   5. ACTUAL CAREER MOVEMENT
+   5. CAREER JOURNEY ROUTES
 
-   The three arrows are:
+   Curve design:
 
-   A. Chennai -> Villarzana
-   B. Villarzana -> Chennai
-   C. Chennai -> Jeddah
+   1. Chennai -> Villarzana
+      Upper/northern curve
 
-   Curves are illustrative, not actual flight paths.
+   2. Villarzana -> Chennai
+      Lower/southern return curve
+
+   3. Chennai -> Jeddah
+      Separate curve toward Saudi Arabia
+
+   Routes illustrate career movements, not actual flights.
 ============================================================ */
 
 const careerJourneys = [
@@ -171,24 +184,21 @@ const careerJourneys = [
     from: 'chennai',
     to: 'villarzana',
     color: '#377eaa',
-    bend: -0.28,
-    label: 'Chennai to Villarzana'
+    bend: 0.30
   },
   {
     id: 'italy-to-india',
     from: 'villarzana',
     to: 'chennai',
     color: '#629bbd',
-    bend: -0.28,
-    label: 'Villarzana back to Chennai'
+    bend: 0.18
   },
   {
     id: 'india-to-saudi',
     from: 'chennai',
     to: 'jeddah',
     color: '#16709d',
-    bend: 0.20,
-    label: 'Chennai to Jeddah'
+    bend: 0.15
   }
 ];
 
@@ -196,16 +206,16 @@ const mapContainer = document.getElementById('career-map');
 
 
 /* ============================================================
-   6. MAP STYLING
+   6. CAREER MAP STYLES
 ============================================================ */
 
 function installCareerMapStyles() {
-  if (document.getElementById('career-map-styles-v5')) {
+  if (document.getElementById('career-map-styles-v6')) {
     return;
   }
 
   const style = document.createElement('style');
-  style.id = 'career-map-styles-v5';
+  style.id = 'career-map-styles-v6';
 
   style.textContent = `
     #career-map {
@@ -280,8 +290,40 @@ function installCareerMapStyles() {
       box-shadow: 0 8px 25px rgba(55,126,170,.16);
     }
 
-    #career-map .leaflet-interactive {
-      outline-offset: 2px;
+    .career-journey-summary {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: #ffffff;
+      border: 1px solid #dce4ec;
+      border-left: 4px solid #377eaa;
+      border-radius: 8px;
+      color: #536377;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .career-journey-summary strong {
+      color: #101d30;
+    }
+
+    .career-journey-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+      color: #377eaa;
+      font-family: Manrope, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .career-journey-steps .step-arrow {
+      color: #8da6b8;
+    }
+
+    .career-journey-summary p {
+      margin: 0;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -296,9 +338,84 @@ function installCareerMapStyles() {
 
 
 /* ============================================================
-   7. LEAFLET LOADER
+   7. ADD PROFESSIONAL CAREER SUMMARY
 
-   Normally Leaflet is already loaded in index.html.
+   Automatically inserted below the map section.
+   No HTML edits required.
+============================================================ */
+
+function addCareerJourneySummary() {
+  const section = document.getElementById('journey');
+
+  if (!section) return;
+
+  if (document.getElementById('career-journey-summary')) {
+    return;
+  }
+
+  const container = section.querySelector('.container');
+
+  if (!container) return;
+
+  const summary = document.createElement('div');
+
+  summary.id = 'career-journey-summary';
+  summary.className = 'career-journey-summary';
+
+  const steps = document.createElement('div');
+  steps.className = 'career-journey-steps';
+
+  const stageNames = [
+    'Chennai',
+    'Villarzana',
+    'Chennai',
+    'Jeddah'
+  ];
+
+  stageNames.forEach((name, index) => {
+    if (index > 0) {
+      const arrow = document.createElement('span');
+      arrow.className = 'step-arrow';
+      arrow.textContent = '→';
+      steps.appendChild(arrow);
+    }
+
+    const stage = document.createElement('span');
+    stage.textContent = name;
+    steps.appendChild(stage);
+  });
+
+  const description = document.createElement('p');
+
+  const heading = document.createElement('strong');
+  heading.textContent = 'My international engineering journey: ';
+
+  description.appendChild(heading);
+
+  description.appendChild(
+    document.createTextNode(
+      'I began my professional career at Bay Forge in Chennai, ' +
+      'gained international industrial experience at ASFO in Italy, ' +
+      'and returned to Chennai to continue working with FOMAS Group. ' +
+      'I subsequently moved to Jeddah, Saudi Arabia, where I worked ' +
+      'with ALIF in manufacturing quality and process improvement.'
+    )
+  );
+
+  summary.append(steps, description);
+
+  const note = container.querySelector('.journey-note');
+
+  if (note) {
+    note.before(summary);
+  } else {
+    container.appendChild(summary);
+  }
+}
+
+
+/* ============================================================
+   8. LEAFLET LOADER
 ============================================================ */
 
 function loadExternalStylesheet(url) {
@@ -356,7 +473,7 @@ async function ensureLeaflet() {
 
 
 /* ============================================================
-   8. FALLBACK MAP
+   9. FALLBACK MAP
 ============================================================ */
 
 function showFallbackMap() {
@@ -415,14 +532,12 @@ function showFallbackMap() {
 
 
 /* ============================================================
-   9. CREATE THREE CURVED DIRECTIONAL ROUTES
+   10. CREATE CURVED DIRECTIONAL ROUTES
 
-   Uses Leaflet polylines and polygons.
+   Curves use quadratic Bezier geometry.
+   Arrowheads are oriented from start to destination.
 
-   This avoids manipulating Leaflet's private SVG elements.
-
-   Curves are recalculated after zooming so arrowheads
-   stay aligned with the direction of travel.
+   Separate bend values keep the return journey distinct.
 ============================================================ */
 
 function createCareerRoutes(map) {
@@ -452,7 +567,7 @@ function createCareerRoutes(map) {
 
     const bendDistance = Math.min(
       Math.abs(journey.bend) * distance,
-      140
+      150
     );
 
     const sign = Math.sign(journey.bend);
@@ -486,21 +601,12 @@ function createCareerRoutes(map) {
       );
     }
 
-    /*
-       Position the arrow at 72% of each journey.
-
-       The arrow is calculated from two nearby points,
-       so it always faces from FROM toward TO.
-    */
-
     const before = pointAt(0.70);
     const after = pointAt(0.74);
-
     const arrowCenter = pointAt(0.72);
 
     const arrowDX = after.x - before.x;
     const arrowDY = after.y - before.y;
-
     const arrowDistance = Math.hypot(
       arrowDX,
       arrowDY
@@ -605,7 +711,7 @@ function createCareerRoutes(map) {
 
 
 /* ============================================================
-   10. INITIALIZE INTERACTIVE CAREER MAP
+   11. INITIALIZE INTERACTIVE CAREER MAP
 ============================================================ */
 
 function initializeCareerMap() {
@@ -655,7 +761,7 @@ function initializeCareerMap() {
   }
 
 
-  /* HIGHLIGHT LOCATION */
+  /* LOCATION SELECTION */
 
   function selectLocation(id, moveMap = true) {
     const location = careerLocations.find(
@@ -742,7 +848,7 @@ function initializeCareerMap() {
   });
 
 
-  /* ADD THREE DIRECTIONAL JOURNEYS */
+  /* ADD THREE CAREER JOURNEYS */
 
   const careerRoutes = createCareerRoutes(map);
 
@@ -794,13 +900,14 @@ function initializeCareerMap() {
 
 
 /* ============================================================
-   11. START THE CAREER MAP
+   12. START THE MAP AND ADD JOURNEY SUMMARY
 ============================================================ */
 
 async function startCareerMap() {
   if (!mapContainer) return;
 
   installCareerMapStyles();
+  addCareerJourneySummary();
 
   mapContainer.textContent = 'Loading geographical map…';
 
