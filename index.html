@@ -3,73 +3,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Mohammed Burhanuddeen R. | Quality & Metallurgical Engineer</title>
-
-  <meta
-    name="description"
-    content="Portfolio of Mohammed Burhanuddeen R., a Materials and Metallurgical Engineer with 10+ years of experience in forging, heat treatment, quality engineering and manufacturing excellence."
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101d30">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <meta name="description" content="Mohammed Burhanuddeen R. — Materials and Metallurgical Engineer specializing in forging, heat treatment, quality assurance and manufacturing analytics.">
+  <title>Mohammed Burhanuddeen R. | Metallurgical & Quality Engineer</title>
 
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >
-
-  <!-- SOCIAL ICON STYLING -->
   <style>
+    /* Social links below MB. */
     .brand-social-wrapper {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      gap: 3px;
       flex-shrink: 0;
+      padding: 8px 0;
     }
 
-    .brand-social-wrapper .brand {
-      display: inline-block;
-      line-height: 1;
-      text-decoration: none;
+    .brand {
+      line-height: 1.15;
     }
 
     .brand-socials {
       display: flex;
+      gap: 12px;
       align-items: center;
-      justify-content: flex-start;
-      gap: 13px;
-      padding-left: 2px;
+      margin-top: 5px;
     }
 
     .brand-socials a {
       display: inline-flex;
+      width: 23px;
+      height: 23px;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
       color: #a8c6dc;
-      text-decoration: none;
-      border-radius: 4px;
-      transition:
-        color .2s ease,
-        transform .2s ease;
+      transition: color .2s, transform .2s;
     }
 
-    .brand-socials a:hover,
-    .brand-socials a:focus-visible {
+    .brand-socials a:hover {
       color: #70c7f2;
       transform: translateY(-2px);
     }
@@ -80,7 +54,6 @@
     }
 
     .brand-socials svg {
-      display: block;
       width: 17px;
       height: 17px;
       fill: currentColor;
@@ -94,173 +67,136 @@
       stroke-linejoin: round;
     }
 
-    @media (max-width: 760px) {
-      .brand-socials {
-        gap: 11px;
-      }
-
-      .brand-socials a {
-        width: 20px;
-        height: 20px;
-      }
-
-      .brand-socials svg {
-        width: 15px;
-        height: 15px;
-      }
+    /* Additional responsive safeguards */
+    html, body {
+      max-width: 100%;
     }
 
-    /* Global journey layout */
-    .journey-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(290px, 1fr);
-      gap: 28px;
-      align-items: stretch;
+    body {
+      overflow-x: clip;
     }
 
-    .journey-map-panel {
+    img {
+      max-width: 100%;
+    }
+
+    .hero-inner > *,
+    .two-col > *,
+    .journey-layout > *,
+    .location-info {
       min-width: 0;
-      overflow: hidden;
-      border: 1px solid #dbe4ed;
-      border-radius: 15px;
-      background: #ffffff;
     }
 
-    #career-map {
+    .hero-photo img {
       width: 100%;
-      height: 605px;
-      min-height: 450px;
-      background: #dce6ed;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .journey-map-footer {
-      display: flex;
+    .nav {
+      position: relative;
+      gap: 20px;
+    }
+
+    .nav-links {
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 16px 24px;
-      color: #496582;
-      font-size: 12px;
-      font-weight: 700;
     }
 
-    .journey-cards {
-      display: grid;
-      grid-template-rows: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+    .journey-layout {
+      min-width: 0;
     }
 
     .location-card {
-      position: relative;
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-      width: 100%;
-      padding: 28px;
-      border: 1px solid #dbe4ed;
-      border-radius: 14px;
-      background: #ffffff;
-      color: #101d30;
-      text-align: left;
-      cursor: pointer;
-      transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        transform .2s ease;
-    }
-
-    .location-card:hover {
-      border-color: #377eaa;
-      box-shadow: 0 8px 24px rgba(16,29,48,.07);
-    }
-
-    .location-card:focus-visible {
-      outline: 3px solid #377eaa;
-      outline-offset: 3px;
-    }
-
-    .location-number {
-      color: #377eaa;
-      font-size: 14px;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .location-details {
       min-width: 0;
-      flex: 1;
     }
 
-    .location-country {
-      margin: 0 0 8px;
-      color: #377eaa;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .15em;
-      text-transform: uppercase;
+    .location-info {
+      overflow-wrap: anywhere;
     }
 
-    .location-details h3 {
-      margin: 0 0 6px;
-      color: #101d30;
-      font-size: 25px;
-      line-height: 1.2;
-      font-weight: 800;
-    }
-
-    .location-company {
-      margin: 0 0 12px;
-      color: #345473;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .location-description {
-      margin: 0;
-      color: #65758a;
-      font-size: 13px;
-      line-height: 1.75;
-    }
-
-    .location-arrow {
-      position: absolute;
-      top: 26px;
-      right: 24px;
-      color: #377eaa;
-      font-size: 17px;
-    }
-
-    @media (max-width: 900px) {
-      .journey-layout {
-        grid-template-columns: 1fr;
+    @media (max-width: 760px) {
+      .nav {
+        min-height: 84px;
       }
 
-      .journey-cards {
-        grid-template-rows: auto;
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+      }
+
+      .nav-links {
+        top: 100%;
+        z-index: 1001;
+        max-height: calc(100dvh - 84px);
+        overflow-y: auto;
+      }
+
+      .hero-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero h1 {
+        font-size: clamp(34px, 8vw, 52px);
+        overflow-wrap: anywhere;
+      }
+
+      .hero-actions,
+      .contact-actions {
+        gap: 12px;
+      }
+
+      .journey-layout,
+      .two-col,
+      .card-grid,
+      .project-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .journey-locations {
+        display: flex;
+        flex-direction: column;
       }
 
       #career-map {
-        height: 480px;
+        height: 380px;
+        min-height: 320px;
       }
     }
 
-    @media (max-width: 520px) {
-      #career-map {
-        height: 370px;
-        min-height: 370px;
+    @media (max-width: 420px) {
+      .container {
+        width: calc(100% - 28px);
       }
 
-      .journey-map-footer {
-        padding: 13px;
-        font-size: 10px;
+      .hero h1 {
+        font-size: clamp(30px, 8vw, 38px);
+        letter-spacing: -1.5px;
+      }
+
+      .hero-actions .btn,
+      .contact-actions .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .stat-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .stat-row strong {
+        font-size: 20px;
+      }
+
+      #career-map {
+        height: 320px;
+        min-height: 320px;
       }
 
       .location-card {
-        padding: 22px;
-      }
-
-      .location-details h3 {
-        font-size: 21px;
+        padding: 16px;
       }
     }
   </style>
@@ -268,70 +204,45 @@
 
 <body>
 
-  <!-- ======================================================
-       NAVIGATION
-  ======================================================= -->
-
+  <!-- NAVIGATION -->
   <header class="site-header">
-    <nav class="navbar container" aria-label="Main navigation">
+    <nav class="nav container" aria-label="Main navigation">
 
       <div class="brand-social-wrapper">
-
-        <a href="#home" class="brand" aria-label="Back to homepage">
+        <a href="#home" class="brand" aria-label="Go to homepage">
           MB<span>.</span>
         </a>
 
         <div class="brand-socials">
-
-          <!-- LINKEDIN -->
-          <a
-            href="https://www.linkedin.com/in/mohammed-burhanuddeen-r-02776b91/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my LinkedIn profile"
-            title="LinkedIn"
-          >
+          <a href="https://www.linkedin.com/in/mohammed-burhanuddeen-r-02776b91/"
+             target="_blank" rel="noopener noreferrer"
+             title="LinkedIn" aria-label="LinkedIn profile">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124ZM7.119 20.452H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0Z"/>
             </svg>
           </a>
 
-          <!-- GITHUB -->
-          <a
-            href="https://github.com/metallurgist"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my GitHub profile"
-            title="GitHub"
-          >
+          <a href="https://github.com/metallurgist"
+             target="_blank" rel="noopener noreferrer"
+             title="GitHub" aria-label="GitHub profile">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 .5a11.5 11.5 0 0 0-3.637 22.41c.575.105.785-.25.785-.555 0-.275-.01-1.005-.015-1.973-3.195.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.685-1.278-1.685-1.045-.715.08-.7.08-.7 1.155.08 1.762 1.185 1.762 1.185 1.027 1.76 2.695 1.25 3.352.955.105-.745.402-1.25.73-1.538-2.55-.29-5.23-1.275-5.23-5.685 0-1.255.45-2.28 1.185-3.085-.12-.29-.515-1.46.115-3.045 0 0 .965-.31 3.16 1.18A11.02 11.02 0 0 1 12 5.045c.975.005 1.955.13 2.87.385 2.195-1.49 3.155-1.18 3.155-1.18.63 1.585.235 2.755.115 3.045.74.805 1.185 1.83 1.185 3.085 0 4.42-2.685 5.39-5.245 5.675.415.36.785 1.075.785 2.165 0 1.565-.015 2.825-.015 3.21 0 .31.21.67.79.555A11.5 11.5 0 0 0 12 .5Z"/>
             </svg>
           </a>
 
-          <!-- EMAIL -->
-          <a
-            href="mailto:rmohammedburhanuddeen@gmail.com"
-            aria-label="Email Mohammed Burhanuddeen"
-            title="Email"
-          >
+          <a href="mailto:rmohammedburhanuddeen@gmail.com"
+             title="Email" aria-label="Send an email">
             <svg class="mail-icon" viewBox="0 0 24 24" aria-hidden="true">
               <rect x="2" y="4" width="20" height="16" rx="2"/>
               <path d="m3 6 9 7 9-7"/>
             </svg>
           </a>
-
         </div>
       </div>
 
-      <button
-        class="menu-toggle"
-        type="button"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
+      <button class="menu-toggle" type="button"
+              aria-label="Toggle navigation"
+              aria-expanded="false">☰</button>
 
       <div class="nav-links">
         <a href="#about">About</a>
@@ -341,637 +252,398 @@
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
       </div>
-
     </nav>
   </header>
 
-
   <main>
 
-    <!-- ====================================================
-         HERO SECTION
-    ===================================================== -->
-
+    <!-- HERO -->
     <section id="home" class="hero">
+      <div class="hero-decor" aria-hidden="true"></div>
 
-      <div class="container hero-grid">
-
+      <div class="container hero-inner">
         <div class="hero-content">
+          <p class="eyebrow">MATERIALS &amp; METALLURGICAL ENGINEERING</p>
 
-          <p class="eyebrow">
-            MATERIALS &amp; METALLURGICAL ENGINEERING
-          </p>
+          <h1>Mohammed<br>Burhanuddeen R<span class="accent">.</span></h1>
 
-          <h1>
-            Mohammed<br>
-            Burhanuddeen R<span>.</span>
-          </h1>
-
-          <p class="hero-subtitle">
-            Quality &amp; Metallurgical Engineering
-            &nbsp;/&nbsp;
+          <h2>
+            Quality Engineering
+            <span class="separator">/</span>
+            Metallurgy
+            <span class="separator">/</span>
             Manufacturing Excellence
-          </p>
+          </h2>
 
-          <p class="hero-description">
-            Materials and Metallurgical Engineer with 10+ years
-            of experience in heavy open-die forging, heat
-            treatment, supplier quality, metallurgical testing,
-            and manufacturing excellence. Combining international
-            industrial experience with data-driven quality
-            improvement.
+          <p class="hero-summary">
+            Materials and Metallurgical Engineer with over a decade of
+            experience in heavy open-die forging, heat treatment,
+            metallurgical testing, quality assurance and manufacturing
+            process improvement across India, Italy and Saudi Arabia.
           </p>
 
           <div class="hero-actions">
-
-            <a href="#projects" class="btn btn-primary">
-              Explore My Work ↗
-            </a>
-
-            <a href="#contact" class="btn btn-outline">
-              Get in Touch
-            </a>
-
-            <a
-              href="assets/cv/"
-              class="btn btn-outline resume-download"
-              download
-            >
+            <a class="btn primary" href="#projects">Explore My Work ↗</a>
+            <a class="btn secondary" href="#contact">Get in Touch</a>
+            <a class="btn outline resume-download" href="assets/cv/" download>
               Download Resume ↓
             </a>
-
           </div>
 
+          <div class="hero-meta">
+            <span>10+ Years Experience</span>
+            <span>India · Italy · Saudi Arabia</span>
+            <span>Manufacturing Quality</span>
+          </div>
         </div>
 
-        <div class="hero-visual">
-
-          <img
-            src="assets/profile.jpg"
-            alt="Professional portrait of Mohammed Burhanuddeen R."
-            class="hero-image"
-            fetchpriority="high"
-          >
-
+        <div class="hero-photo">
+          <img src="assets/profile.jpg"
+               alt="Mohammed Burhanuddeen R. — professional portrait"
+               fetchpriority="high">
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         ABOUT
-    ===================================================== -->
-
+    <!-- ABOUT -->
     <section id="about" class="section">
-
       <div class="container">
+        <p class="section-label">ABOUT ME</p>
+        <h2>Engineering quality from the inside out.</h2>
 
-        <div class="section-heading">
-          <p class="eyebrow">ABOUT ME</p>
-          <h2>Engineering quality from the inside out.</h2>
-        </div>
-
-        <div class="about-grid">
-
+        <div class="two-col">
           <div>
-            <p>
-              I am a Materials and Metallurgical Engineer
-              with a professional background spanning heavy
-              forging, heat treatment, metallurgical testing,
-              quality assurance and manufacturing operations.
-            </p>
-
-            <p>
-              My career includes engineering experience in
-              India, Italy and Saudi Arabia, with exposure
-              to demanding industrial applications across
-              aerospace, nuclear, marine and automotive sectors.
-            </p>
-
-            <p>
-              I focus on translating technical investigations
-              into measurable improvements in product quality,
-              process stability, traceability and manufacturing
-              performance.
+            <p class="section-intro">
+              A career grounded in metallurgy, manufacturing engineering
+              and the discipline of delivering reliable industrial products.
             </p>
           </div>
 
-          <div class="about-highlights">
-
-            <div class="highlight-card">
-              <strong>10+</strong>
-              <span>Years of Engineering Experience</span>
-            </div>
-
-            <div class="highlight-card">
-              <strong>03</strong>
-              <span>Countries of Industrial Experience</span>
-            </div>
-
-            <div class="highlight-card">
-              <strong>2016</strong>
-              <span>Metallurgical Engineering Graduate</span>
-            </div>
-
+          <div class="body-copy">
+            <p>
+              My experience spans heavy forging, heat treatment,
+              mechanical and metallurgical testing, manufacturing
+              inspection and quality assurance.
+            </p>
+            <p>
+              I have worked with industrial applications involving
+              aerospace, nuclear, marine and automotive components,
+              followed by manufacturing quality engineering in
+              industrial fastener production.
+            </p>
+            <p>
+              I combine practical shop-floor engineering with statistical
+              analysis, root cause investigation and digital tools to
+              improve process stability, product conformity and traceability.
+            </p>
           </div>
-
         </div>
 
+        <div class="stat-row">
+          <div><strong>10+</strong><span>Years of experience</span></div>
+          <div><strong>03</strong><span>Countries</span></div>
+          <div><strong>06</strong><span>Core engineering disciplines</span></div>
+        </div>
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         EXPERTISE
-    ===================================================== -->
-
+    <!-- EXPERTISE -->
     <section id="expertise" class="section section-alt">
-
       <div class="container">
+        <p class="section-label">CORE EXPERTISE</p>
+        <h2>Technical depth. Manufacturing perspective.</h2>
+        <p class="section-intro">
+          Integrated expertise across metallurgy, process engineering,
+          manufacturing quality and digital improvement.
+        </p>
 
-        <div class="section-heading">
-          <p class="eyebrow">CORE EXPERTISE</p>
-          <h2>Technical depth. Manufacturing perspective.</h2>
-          <p>
-            Integrated expertise across metallurgy,
-            manufacturing quality and industrial improvement.
-          </p>
-        </div>
-
-        <div class="expertise-grid">
-
+        <div class="card-grid">
           <article class="expertise-card">
+            <span class="card-number">01</span>
             <h3>Forging &amp; Metallurgy</h3>
-            <p>
-              Heavy open-die forging, forging defects,
-              material behavior, grain flow, process
-              qualification and metallurgical investigations.
-            </p>
+            <p>Heavy open-die forging, grain flow, material behavior,
+               forging defects and process qualification.</p>
           </article>
 
           <article class="expertise-card">
+            <span class="card-number">02</span>
             <h3>Heat Treatment</h3>
-            <p>
-              Heat treatment cycle development, process
-              monitoring, microstructural evaluation,
-              mechanical properties and failure troubleshooting.
-            </p>
+            <p>Heat treatment cycles, process monitoring,
+               microstructure, mechanical properties and troubleshooting.</p>
           </article>
 
           <article class="expertise-card">
-            <h3>Quality Engineering</h3>
-            <p>
-              Inspection and test planning, quality assurance,
-              nonconformance management, root cause analysis,
-              CAPA and supplier quality.
-            </p>
+            <span class="card-number">03</span>
+            <h3>Quality Assurance</h3>
+            <p>Inspection planning, incoming and in-process quality,
+               NCR, RCA, CAPA and quality systems.</p>
           </article>
 
           <article class="expertise-card">
+            <span class="card-number">04</span>
             <h3>Metallurgical Testing</h3>
-            <p>
-              Mechanical testing, hardness testing,
-              metallography, material characterization,
-              dimensional inspection and NDT coordination.
-            </p>
+            <p>Mechanical testing, hardness, metallography,
+               material characterization and NDT coordination.</p>
           </article>
 
           <article class="expertise-card">
-            <h3>Statistical Quality Control</h3>
-            <p>
-              SPC, control charts, process capability,
-              measurement system analysis, Gage R&amp;R
-              and quality performance monitoring.
-            </p>
+            <span class="card-number">05</span>
+            <h3>Statistical Process Control</h3>
+            <p>Control charts, process capability, measurement
+               system analysis and Gage R&amp;R.</p>
           </article>
 
           <article class="expertise-card">
-            <h3>Digital Manufacturing Quality</h3>
-            <p>
-              Python, Excel, quality dashboards, Streamlit,
-              data visualization, reporting automation
-              and engineering analytics.
-            </p>
+            <span class="card-number">06</span>
+            <h3>Quality Data Analytics</h3>
+            <p>Python, Excel, Streamlit, manufacturing dashboards,
+               data visualization and reporting automation.</p>
           </article>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         EXPERIENCE
-    ===================================================== -->
-
+    <!-- EXPERIENCE -->
     <section id="experience" class="section">
-
       <div class="container">
+        <p class="section-label">PROFESSIONAL EXPERIENCE</p>
+        <h2>Built on the manufacturing floor.</h2>
 
-        <div class="section-heading">
-          <p class="eyebrow">PROFESSIONAL EXPERIENCE</p>
-          <h2>Built on the manufacturing floor.</h2>
+        <div class="timeline">
+          <article class="timeline-item">
+            <div>
+              <span class="timeline-tag">SAUDI ARABIA</span>
+              <p>ALIF · AIMS Group</p>
+            </div>
+            <div>
+              <h3>Quality Engineer</h3>
+              <p>
+                Quality engineering across wire drawing, forging,
+                rolling, collation and packing operations.
+                Inspection systems, SPC, quality investigations,
+                process monitoring and manufacturing analytics.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div>
+              <span class="timeline-tag">INDIA</span>
+              <p>Bay Forge Ltd · FOMAS Group</p>
+            </div>
+            <div>
+              <h3>Metallurgical &amp; Quality Engineering</h3>
+              <p>
+                Heavy forging, heat treatment, raw material inspection,
+                metallurgical testing, qualification activities,
+                production quality and technical troubleshooting.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div>
+              <span class="timeline-tag">ITALY</span>
+              <p>ASFO S.p.A. · FOMAS Group</p>
+            </div>
+            <div>
+              <h3>International Industrial Experience</h3>
+              <p>
+                Engineering training and industrial experience in
+                Villamarzana, Italy, followed by a return to Chennai.
+              </p>
+            </div>
+          </article>
         </div>
-
-        <div class="experience-list">
-
-          <article class="experience-card">
-
-            <div class="experience-header">
-              <div>
-                <h3>Quality Engineer</h3>
-                <p>ALIF · AIMS Group</p>
-              </div>
-              <span>2025 – 2026</span>
-            </div>
-
-            <p>
-              Manufacturing quality engineering for industrial
-              fasteners, including wire drawing, nail forging,
-              rolling, collation and packing processes.
-            </p>
-
-            <p>
-              Quality inspection, process control,
-              nonconformance investigation, SPC,
-              measurement system studies and
-              data-driven manufacturing improvement.
-            </p>
-
-          </article>
-
-          <article class="experience-card">
-
-            <div class="experience-header">
-              <div>
-                <h3>Metallurgical &amp; Quality Engineering</h3>
-                <p>Bay Forge Ltd · FOMAS Group</p>
-              </div>
-              <span>2017 – 2025</span>
-            </div>
-
-            <p>
-              Engineering and quality responsibilities
-              in heavy forging, heat treatment,
-              metallurgical testing, raw material inspection,
-              process qualification and manufacturing quality.
-            </p>
-
-            <p>
-              Supported high-integrity industrial applications
-              and multidisciplinary manufacturing improvement
-              initiatives.
-            </p>
-
-          </article>
-
-          <article class="experience-card">
-
-            <div class="experience-header">
-              <div>
-                <h3>International Industrial Experience</h3>
-                <p>ASFO S.p.A. · FOMAS Group, Italy</p>
-              </div>
-              <span>Italy Assignment</span>
-            </div>
-
-            <p>
-              International exposure to industrial engineering
-              and manufacturing practices within FOMAS Group,
-              followed by a return to Bay Forge in Chennai.
-            </p>
-
-          </article>
-
-        </div>
-
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         GLOBAL ENGINEERING JOURNEY
-    ===================================================== -->
-
-    <section id="journey" class="section section-alt">
-
+    <!-- GLOBAL JOURNEY -->
+    <section id="journey" class="section journey-section">
       <div class="container">
-
-        <div class="section-heading">
-          <p class="eyebrow">GLOBAL ENGINEERING JOURNEY</p>
-          <h2>Engineering experience across borders.</h2>
-          <p>
-            From heavy forging in India and international
-            industrial exposure in Italy to manufacturing
-            quality engineering in Saudi Arabia.
-          </p>
-        </div>
+        <p class="section-label">GLOBAL ENGINEERING JOURNEY</p>
+        <h2>Engineering experience across borders.</h2>
+        <p class="section-intro">
+          Chennai → Villamarzana → Chennai → Jeddah
+        </p>
 
         <div class="journey-layout">
-
-          <!-- MAP -->
-
           <div class="journey-map-panel">
-
-            <div
-              id="career-map"
-              role="region"
-              aria-label="Interactive map of engineering career locations"
-            ></div>
-
-            <div class="journey-map-footer">
-              <span>⊙ Select a location to explore</span>
-              <span>3 Locations · 3 Countries</span>
+            <div id="career-map"
+                 role="region"
+                 aria-label="Interactive map of professional career locations">
             </div>
 
+            <div class="map-footer">
+              <span>Select a location to explore</span>
+              <span>3 locations · 3 countries</span>
+            </div>
           </div>
 
+          <div class="journey-locations">
 
-          <!-- LOCATION CARDS -->
-
-          <div class="journey-cards">
-
-            <!-- CHENNAI -->
-
-            <button
-              class="location-card"
-              type="button"
-              data-location="chennai"
-              aria-pressed="false"
-            >
-
+            <button class="location-card" type="button"
+                    data-location="chennai">
               <span class="location-number">01</span>
-
-              <div class="location-details">
-
-                <p class="location-country">INDIA</p>
-
-                <h3>Chennai</h3>
-
-                <p class="location-company">
+              <span class="location-info">
+                <span class="location-country">INDIA</span>
+                <strong>Chennai</strong>
+                <span class="location-company">
                   Bay Forge Ltd · FOMAS Group
-                </p>
-
-                <p class="location-description">
-                  Heavy open-die forging, metallurgy,
-                  quality assurance and heat treatment.
-                </p>
-
-              </div>
-
-              <span class="location-arrow" aria-hidden="true">
-                ↗
+                </span>
+                <span class="location-detail">
+                  Heavy open-die forging, metallurgy, quality assurance
+                  and heat treatment. Returned after the Italy assignment.
+                </span>
               </span>
-
+              <span class="location-arrow" aria-hidden="true">↗</span>
             </button>
 
-
-            <!-- ITALY -->
-
-            <button
-              class="location-card"
-              type="button"
-              data-location="villarzana"
-              aria-pressed="false"
-            >
-
+            <button class="location-card" type="button"
+                    data-location="villarzana">
               <span class="location-number">02</span>
-
-              <div class="location-details">
-
-                <p class="location-country">ITALY</p>
-
-                <h3>Villamarzana</h3>
-
-                <p class="location-company">
+              <span class="location-info">
+                <span class="location-country">ITALY</span>
+                <strong>Villamarzana</strong>
+                <span class="location-company">
                   ASFO S.p.A. · FOMAS Group
-                </p>
-
-                <p class="location-description">
-                  International engineering training
-                  and industrial work experience.
-                </p>
-
-              </div>
-
-              <span class="location-arrow" aria-hidden="true">
-                ↗
+                </span>
+                <span class="location-detail">
+                  International engineering training and industrial
+                  work experience.
+                </span>
               </span>
-
+              <span class="location-arrow" aria-hidden="true">↗</span>
             </button>
 
-
-            <!-- JEDDAH -->
-
-            <button
-              class="location-card"
-              type="button"
-              data-location="jeddah"
-              aria-pressed="false"
-            >
-
+            <button class="location-card" type="button"
+                    data-location="jeddah">
               <span class="location-number">03</span>
-
-              <div class="location-details">
-
-                <p class="location-country">
-                  SAUDI ARABIA
-                </p>
-
-                <h3>Jeddah</h3>
-
-                <p class="location-company">
+              <span class="location-info">
+                <span class="location-country">SAUDI ARABIA</span>
+                <strong>Jeddah</strong>
+                <span class="location-company">
                   ALIF · AIMS Group
-                </p>
-
-                <p class="location-description">
-                  Manufacturing quality, fastener
+                </span>
+                <span class="location-detail">
+                  Manufacturing quality, industrial fastener
                   production and quality analytics.
-                </p>
-
-              </div>
-
-              <span class="location-arrow" aria-hidden="true">
-                ↗
+                </span>
               </span>
-
+              <span class="location-arrow" aria-hidden="true">↗</span>
             </button>
 
           </div>
-
         </div>
 
+        <p class="journey-note">
+          The interactive map illustrates the geographical sequence
+          of my engineering career.
+        </p>
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         PROJECTS
-    ===================================================== -->
-
+    <!-- PROJECTS -->
     <section id="projects" class="section">
-
       <div class="container">
+        <p class="section-label">SELECTED PROJECTS</p>
+        <h2>Engineering improvements with measurable value.</h2>
+        <p class="section-intro">
+          Manufacturing quality, metallurgical engineering and
+          digital analytics initiatives.
+        </p>
 
-        <div class="section-heading">
-          <p class="eyebrow">SELECTED PROJECTS</p>
-          <h2>Engineering improvements with measurable value.</h2>
-          <p>
-            A selection of manufacturing, metallurgy
-            and digital quality initiatives.
-          </p>
-        </div>
-
-        <div class="projects-grid">
-
+        <div class="project-grid">
           <article class="project-card">
-            <p class="eyebrow">PROCESS IMPROVEMENT</p>
-            <h3>Heat Treatment Cost Optimization</h3>
+            <div class="project-icon">⚙</div>
+            <span class="project-type">HEAT TREATMENT</span>
+            <h3>Heat Treatment Optimization</h3>
             <p>
-              Heat treatment process improvement initiatives
-              delivering approximately 15% cost reduction
-              during 2021–2022, followed by a further
-              5% improvement in 2023.
+              Improvement of heat treatment processes, operational
+              efficiency and manufacturing cost performance.
             </p>
+            <span class="project-tags">Process improvement · Metallurgy</span>
           </article>
 
           <article class="project-card">
-            <p class="eyebrow">QUALITY ANALYTICS</p>
-            <h3>Statistical Process Control</h3>
+            <div class="project-icon">▥</div>
+            <span class="project-type">STATISTICAL QUALITY</span>
+            <h3>Forging SPC &amp; Capability</h3>
             <p>
-              Forging dimensional monitoring through
-              control charts, process capability,
-              statistical evaluation and measurement
-              system analysis.
+              Dimensional monitoring, control charts, process
+              capability and measurement system evaluation.
             </p>
+            <span class="project-tags">SPC · Gage R&amp;R · Capability</span>
           </article>
 
           <article class="project-card">
-            <p class="eyebrow">DIGITAL TRANSFORMATION</p>
+            <div class="project-icon">▤</div>
+            <span class="project-type">DIGITAL QUALITY</span>
             <h3>Quality Intelligence Dashboard</h3>
             <p>
-              Development of a Python and Streamlit
-              quality analytics platform for
-              defect analysis, production quality,
-              calibration monitoring and manufacturing
-              performance visibility.
+              Python and Streamlit dashboards for defect analysis,
+              production quality, calibration and process monitoring.
             </p>
+            <span class="project-tags">Python · Streamlit · Analytics</span>
           </article>
 
           <article class="project-card">
-            <p class="eyebrow">ENGINEERING SYSTEMS</p>
-            <h3>Product Lifecycle Management</h3>
+            <div class="project-icon">◇</div>
+            <span class="project-type">ENGINEERING SYSTEMS</span>
+            <h3>Manufacturing Process Improvement</h3>
             <p>
-              Engineering experience involving
-              Siemens Teamcenter PLM and structured
-              manufacturing information management.
+              Structured technical investigations, nonconformance
+              prevention, traceability and process improvement.
             </p>
+            <span class="project-tags">RCA · CAPA · Manufacturing</span>
           </article>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ====================================================
-         CONTACT
-    ===================================================== -->
-
-    <section id="contact" class="section section-alt">
-
-      <div class="container">
-
-        <div class="section-heading">
-          <p class="eyebrow">GET IN TOUCH</p>
-          <h2>Let's connect.</h2>
-          <p>
-            Open to discussions on quality engineering,
-            metallurgy, manufacturing excellence
-            and professional opportunities.
-          </p>
-        </div>
+    <!-- CONTACT -->
+    <section id="contact" class="section contact-section">
+      <div class="container contact-inner">
+        <p class="section-label">GET IN TOUCH</p>
+        <h2>Let's connect.</h2>
+        <p>
+          Open to professional discussions and opportunities
+          in quality engineering, metallurgy and manufacturing excellence.
+        </p>
 
         <div class="contact-actions">
-
-          <a
-            class="btn btn-primary"
-            href="mailto:rmohammedburhanuddeen@gmail.com"
-          >
+          <a class="btn primary"
+             href="mailto:rmohammedburhanuddeen@gmail.com">
             Send an Email ↗
           </a>
 
-          <a
-            class="btn btn-outline"
-            href="https://www.linkedin.com/in/mohammed-burhanuddeen-r-02776b91/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Connect on LinkedIn ↗
+          <a class="btn outline"
+             href="https://www.linkedin.com/in/mohammed-burhanuddeen-r-02776b91/"
+             target="_blank" rel="noopener noreferrer">
+            LinkedIn ↗
           </a>
 
-          <a
-            class="btn btn-outline"
-            href="https://github.com/metallurgist"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View GitHub ↗
+          <a class="btn outline"
+             href="https://github.com/metallurgist"
+             target="_blank" rel="noopener noreferrer">
+            GitHub ↗
           </a>
-
         </div>
-
       </div>
-
     </section>
 
   </main>
 
-
-  <!-- ======================================================
-       FOOTER
-  ======================================================= -->
-
-  <footer class="site-footer">
-
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="container footer-inner">
-
-      <p>
-        © <span id="year">2026</span>
-        Mohammed Burhanuddeen R.
-      </p>
-
-      <p>
-        Quality &amp; Metallurgical Engineering
-      </p>
-
+      <span>© <span id="year">2026</span> Mohammed Burhanuddeen R.</span>
+      <span>Materials &amp; Metallurgical Engineering</span>
     </div>
-
   </footer>
 
-
-  <!-- ======================================================
-       SCRIPTS
-
-       Existing script.js handles:
-       - Mobile navigation
-       - Resume downloader
-       - Company logos
-       - Leaflet career map
-       - Curved routes and arrows
-       - Interactive cards
-       - Career journey summary
-  ======================================================= -->
-
+  <!-- Existing interactive functionality -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="script.js"></script>
 
 </body>
