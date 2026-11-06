@@ -1,0 +1,361 @@
+
+/* ==========================================================
+   RESPONSIVE FIX — METALLURGIST PORTFOLIO
+   Mobile, tablet and desktop
+   Preserves existing colors, fonts and map styling
+========================================================== */
+
+html {
+  max-width: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img, video, svg {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+.container {
+  width: min(1120px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.hero-inner,
+.hero-grid,
+.about-grid,
+.two-col,
+.journey-layout,
+.card-grid,
+.expertise-grid,
+.project-grid,
+.projects-grid {
+  min-width: 0;
+}
+
+.hero-inner > *,
+.hero-grid > *,
+.journey-layout > *,
+.about-grid > *,
+.two-col > * {
+  min-width: 0;
+}
+
+.hero-photo,
+.hero-visual,
+.hero-image {
+  max-width: 100%;
+}
+
+#career-map {
+  width: 100%;
+  min-width: 0;
+}
+
+.location-card {
+  min-width: 0;
+}
+
+.location-info,
+.location-details {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.brand-social-wrapper {
+  flex-shrink: 0;
+}
+
+.brand-socials {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.brand-socials a {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* TABLET */
+
+@media (max-width: 1024px) {
+  .container {
+    width: min(100% - 36px, 960px);
+  }
+
+  .hero-inner,
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+    gap: 30px;
+  }
+
+  .journey-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-locations,
+  .journey-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+
+  .location-card {
+    padding: 18px;
+  }
+
+  #career-map {
+    height: 430px;
+    min-height: 350px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 760px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav,
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    min-height: 80px;
+    position: relative;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    flex-direction: column;
+    gap: 0;
+    padding: 10px 18px;
+    background: #101d30;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 15px 30px rgba(0,0,0,.2);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 13px 8px;
+    font-size: 14px;
+  }
+
+  .hero-inner,
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    padding-top: 65px;
+    padding-bottom: 60px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 8vw, 48px);
+    letter-spacing: -1.5px;
+    overflow-wrap: anywhere;
+  }
+
+  .hero h2,
+  .hero-subtitle {
+    font-size: clamp(16px, 4.5vw, 21px);
+  }
+
+  .hero-summary,
+  .hero-description {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .hero-photo,
+  .hero-visual {
+    width: min(100%, 340px);
+    margin-inline: auto;
+    justify-self: center;
+  }
+
+  .hero-image {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .hero-actions,
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hero-meta {
+    margin-top: 30px;
+    gap: 12px;
+  }
+
+  .section {
+    padding-top: 65px;
+    padding-bottom: 65px;
+  }
+
+  .section h2 {
+    font-size: clamp(27px, 7vw, 36px);
+    letter-spacing: -.8px;
+  }
+
+  .two-col,
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .card-grid,
+  .expertise-grid,
+  .project-grid,
+  .projects-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .timeline-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .stat-row,
+  .about-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .journey-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .journey-locations,
+  .journey-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .location-card {
+    width: 100%;
+    min-height: 145px;
+  }
+
+  #career-map {
+    height: 370px;
+    min-height: 370px;
+  }
+
+  .map-footer,
+  .journey-map-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .career-journey-summary {
+    padding: 16px;
+    font-size: 13px;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 420px) {
+  .container {
+    width: calc(100% - 28px);
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 8vw, 36px);
+  }
+
+  .hero-actions .btn,
+  .contact-actions .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .stat-row,
+  .about-highlights {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expertise-card,
+  .project-card {
+    padding: 22px;
+  }
+
+  #career-map {
+    height: 320px;
+    min-height: 320px;
+  }
+
+  .location-card {
+    padding: 18px;
+  }
+
+  .brand-socials {
+    gap: 8px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
